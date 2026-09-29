@@ -445,7 +445,7 @@ android {
       fatal("Invalid commit time!")
     val minorVersion = monthYears(now, then)
 
-    versionCode = config.applicationVersion
+    versionCode = /*config.applicationVersion*/3000
     versionName = "${config.majorVersion}.${minorVersion}"
   }
 
@@ -684,7 +684,7 @@ android {
       val (abi, abiVariant) = Abi.VARIANTS.entries.first { it.value.flavor == abiFlavor }
       val (sdk, sdkVariant) = Sdk.VARIANTS.entries.first { it.value.flavor == sdkFlavor }
 
-      val flavorVersionCode = if (variant.debuggable) 0 else {
+      val flavorVersionCode = if (variant.debuggable || true) 0 else {
         sdk * 100 + abi
       }
       val flavorVersionNameSuffix = StringBuilder().apply {

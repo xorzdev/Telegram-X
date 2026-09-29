@@ -5833,11 +5833,12 @@ public class ProfileController extends ViewController<ProfileController.Args> im
             } else {
               fillMediaControllers(controllers, context, tdlib);
             }
-            getSimilarChatsCount(false, true);
-            getSimilarChatsCount(true, true);
           } else {
             controllers.add(new SharedRestrictionController(context, tdlib).setRestrictionReason(restrictionText));
           }
+
+          getSimilarChatsCount(false, true);
+          getSimilarChatsCount(true, true);
 
           switch (mode) {
             case Mode.USER:

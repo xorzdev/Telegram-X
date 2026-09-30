@@ -29,6 +29,7 @@ import org.thunderdog.challegram.Log;
 import org.thunderdog.challegram.U;
 import org.thunderdog.challegram.component.dialogs.ChatView;
 import org.thunderdog.challegram.component.sharedmedia.MediaSmallView;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.config.Config;
 import org.thunderdog.challegram.data.MediaWrapper;
 import org.thunderdog.challegram.data.TD;
@@ -1527,7 +1528,7 @@ public class MediaItem implements MessageSourceProvider, InvalidateContentProvid
   public <T extends View & DrawableProvider> void drawComponents (T view, Canvas c, int left, int top, int right, int bottom) {
     if (fileProgress != null) {
       fileProgress.setBounds(left, top, right, bottom);
-      if (hasSpoiler) {
+      if (!ClientOverrides.isHiddenMode && hasSpoiler) {
         fileProgress.setRequestedAlpha(0f, 1f);
       }
       fileProgress.draw(view, c);

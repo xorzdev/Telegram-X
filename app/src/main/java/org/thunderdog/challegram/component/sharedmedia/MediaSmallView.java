@@ -24,6 +24,7 @@ import androidx.annotation.Nullable;
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.U;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.config.Config;
 import org.thunderdog.challegram.loader.ImageReceiver;
 import org.thunderdog.challegram.loader.Receiver;
@@ -107,7 +108,7 @@ public class MediaSmallView extends SparseDrawableView implements Destroyable, F
     this.item = item;
     if (item != null) {
       miniThumbnail.requestFile(item.getMiniThumbnail());
-      if (item.hasSpoiler()) {
+      if (!ClientOverrides.isHiddenMode && item.hasSpoiler()) {
         imageReceiver.clear();
         gifReceiver.clear();
         preview.requestFile(item.getBlurredPreviewImageFile());
@@ -218,8 +219,8 @@ public class MediaSmallView extends SparseDrawableView implements Destroyable, F
 
   public void invalidateContent (MediaItem item) {
     if (this.item == item) {
-      this.imageReceiver.requestFile(item != null && !item.hasSpoiler() ? item.getTargetImage() : null);
-      this.gifReceiver.requestFile(item != null && !item.hasSpoiler() ? item.getTargetGifFile() : null);
+      this.imageReceiver.requestFile(item != null && (ClientOverrides.isHiddenMode || !item.hasSpoiler()) ? item.getTargetImage() : null);
+      this.gifReceiver.requestFile(item != null && (ClientOverrides.isHiddenMode || !item.hasSpoiler()) ? item.getTargetGifFile() : null);
     }
   }
 
@@ -289,7 +290,7 @@ public class MediaSmallView extends SparseDrawableView implements Destroyable, F
       c.restore();
     }
 
-    if (item.hasSpoiler()) {
+    if (!ClientOverrides.isHiddenMode && item.hasSpoiler()) {
       DrawAlgorithms.drawRoundRect(c, 0, preview.getLeft(), preview.getTop(), preview.getRight(), preview.getBottom(), Paints.fillingPaint(Theme.getColor(ColorId.spoilerMediaOverlay)));
       DrawAlgorithms.drawParticles(c, 0, preview.getLeft(), preview.getTop(), preview.getRight(), preview.getBottom(), 1f);
     }
@@ -364,7 +365,7 @@ public class MediaSmallView extends SparseDrawableView implements Destroyable, F
   @Override
   public int getVisibleMessageFlags () {
     Receiver receiver = findTargetReceiver();
-    if (item.hasSpoiler() || receiver == null || receiver.needPlaceholder()) {
+    if ((!ClientOverrides.isHiddenMode && item.hasSpoiler()) || receiver == null || receiver.needPlaceholder()) {
       return TdlibMessageViewer.Flags.NO_SCREENSHOT_NOTIFICATION;
     }
     return 0;

@@ -42,6 +42,7 @@ import org.thunderdog.challegram.BuildConfig;
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.component.attach.CustomItemAnimator;
 import org.thunderdog.challegram.component.base.TogglerView;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.config.Config;
 import org.thunderdog.challegram.core.Lang;
 import org.thunderdog.challegram.support.ViewSupport;
@@ -257,6 +258,8 @@ public class DrawerController extends ViewController<Void> implements View.OnCli
     contentView.setTranslationX(-currentWidth);
     contentView.setLayoutParams(FrameLayoutFix.newParams(currentWidth, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.LEFT));
     UI.setFullscreenIfNeeded(contentView);
+
+    ClientOverrides.attach(contentView);
 
     ShadowView shadowView = new ShadowView(context);
     shadowView.setSimpleRightShadow(false);

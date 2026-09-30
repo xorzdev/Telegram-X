@@ -19,6 +19,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 
 import org.drinkless.tdlib.TdApi;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.data.ContentPreview;
 import org.thunderdog.challegram.data.TD;
 import org.thunderdog.challegram.loader.ComplexReceiver;
@@ -318,7 +319,7 @@ public abstract class MediaPreview implements ListAnimator.Measurable {
       }
       case TdApi.MessagePhoto.CONSTRUCTOR: {
         TdApi.MessagePhoto messagePhoto = (TdApi.MessagePhoto) message.content;
-        return valueOf(tdlib, messagePhoto.photo, size, cornerRadius, messagePhoto.isSecret || messagePhoto.hasSpoiler);
+        return valueOf(tdlib, messagePhoto.photo, size, cornerRadius, messagePhoto.isSecret || (!ClientOverrides.isHiddenMode && messagePhoto.hasSpoiler));
       }
       case TdApi.MessagePaidMedia.CONSTRUCTOR: {
         TdApi.MessagePaidMedia paidMedia = (TdApi.MessagePaidMedia) message.content;
@@ -374,11 +375,11 @@ public abstract class MediaPreview implements ListAnimator.Measurable {
       }
       case TdApi.MessageVideo.CONSTRUCTOR: {
         TdApi.MessageVideo messageVideo = (TdApi.MessageVideo) message.content;
-        return valueOf(tdlib, messageVideo.video, size, cornerRadius, messageVideo.isSecret || messageVideo.hasSpoiler);
+        return valueOf(tdlib, messageVideo.video, size, cornerRadius, messageVideo.isSecret || (!ClientOverrides.isHiddenMode && messageVideo.hasSpoiler));
       }
       case TdApi.MessageAnimation.CONSTRUCTOR: {
         TdApi.MessageAnimation messageAnimation = (TdApi.MessageAnimation) message.content;
-        return valueOf(tdlib, messageAnimation.animation, size, cornerRadius, messageAnimation.isSecret || messageAnimation.hasSpoiler);
+        return valueOf(tdlib, messageAnimation.animation, size, cornerRadius, messageAnimation.isSecret || (!ClientOverrides.isHiddenMode && messageAnimation.hasSpoiler));
       }
       case TdApi.MessageGame.CONSTRUCTOR: {
         TdApi.Game game = ((TdApi.MessageGame) message.content).game;

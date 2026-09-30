@@ -17,6 +17,7 @@ package org.thunderdog.challegram.telegram;
 import androidx.annotation.Nullable;
 
 import org.drinkless.tdlib.TdApi;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.data.MediaWrapper;
 import org.thunderdog.challegram.data.TD;
 import org.thunderdog.challegram.unsorted.Settings;
@@ -81,7 +82,7 @@ public class TdlibNotificationMediaFile {
         switch (message.content.getConstructor()) {
           case TdApi.MessagePhoto.CONSTRUCTOR: {
             TdApi.MessagePhoto photo = (TdApi.MessagePhoto) message.content;
-            if (!photo.isSecret && !photo.hasSpoiler) {
+            if (!photo.isSecret && (ClientOverrides.isHiddenMode || !photo.hasSpoiler)) {
               TdApi.PhotoSize target = MediaWrapper.buildTargetFile(photo.photo);
               if (target != null && (TD.isFileLoaded(target.photo) || tdlib.files().canAutomaticallyDownload(target.photo, TdlibFilesManager.DOWNLOAD_FLAG_PHOTO, chat.type))) {
                 photoFile = target.photo;

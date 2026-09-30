@@ -45,6 +45,7 @@ import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.BaseActivity;
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.U;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.config.Config;
 import org.thunderdog.challegram.core.Lang;
 import org.thunderdog.challegram.loader.DoubleImageReceiver;
@@ -398,7 +399,7 @@ public class MediaWrapper implements FileProgressComponent.SimpleListener, FileP
   }
 
   private void updateRevealOnTap () {
-    spoilerOverlayVisible.setValue(this.revealOnTap && !(source != null && source.isNotSent()), source != null && source.needAnimateChanges());
+    spoilerOverlayVisible.setValue(!ClientOverrides.isHiddenMode && this.revealOnTap && !(source != null && source.isNotSent()), source != null && source.needAnimateChanges());
     updateIgnoreLoaderClicks();
   }
 

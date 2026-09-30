@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import org.drinkless.tdlib.Client;
 import org.drinkless.tdlib.TdApi;
 import org.thunderdog.challegram.R;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.config.Config;
 import org.thunderdog.challegram.core.Background;
 import org.thunderdog.challegram.core.Lang;
@@ -995,7 +996,7 @@ public class ReplyComponent implements Client.ResultHandler, Destroyable {
       if (webp) {
         preview.setWebp();
       }
-      if (isPrivate || hasSpoiler) {
+      if (isPrivate || (!ClientOverrides.isHiddenMode && hasSpoiler)) {
         preview.setIsPrivate();
         preview.setNeedBlur();
       }
@@ -1008,7 +1009,7 @@ public class ReplyComponent implements Client.ResultHandler, Destroyable {
     } else {
       miniPreview = null;
     }
-    return new MediaPreview(miniPreview, preview, contour, isPrivate || hasSpoiler, previewCircle);
+    return new MediaPreview(miniPreview, preview, contour, isPrivate || (!ClientOverrides.isHiddenMode && hasSpoiler), previewCircle);
   }
 
   private void setMessage (TdApi.Message msg, boolean forceRequestImage, boolean forceLocal) {

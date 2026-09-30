@@ -69,6 +69,7 @@ import org.thunderdog.challegram.Log;
 import org.thunderdog.challegram.MainActivity;
 import org.thunderdog.challegram.R;
 import org.thunderdog.challegram.U;
+import org.thunderdog.challegram.config.ClientOverrides;
 import org.thunderdog.challegram.component.dialogs.SearchManager;
 import org.thunderdog.challegram.config.Config;
 import org.thunderdog.challegram.core.Lang;
@@ -182,9 +183,12 @@ public class MainController extends ViewPagerController<Void> implements Menu, M
   private FrameLayoutFix pagerWrap;
   private OverlayButtonWrap composeWrap;
 
+  private final ClientOverrides.HiddenModeListener hiddenModeListener = hiddenMode -> updatePagerSections(true);
+
   @Override
   protected View onCreateView (Context context) {
     initPagerSections();
+    ClientOverrides.addHiddenModeListener(hiddenModeListener);
     return super.onCreateView(context);
   }
 
@@ -1126,6 +1130,7 @@ public class MainController extends ViewPagerController<Void> implements Menu, M
     context().appUpdater().removeListener(this);
     tdlib.context().global().removeCountersListener(this);
     Settings.instance().removeChatFolderSettingsListener(this);
+    ClientOverrides.removeHiddenModeListener(hiddenModeListener);
     tdlib.listeners().unsubscribeFromChatFoldersUpdates(this);
     if (chatListUnreadCountListener != null) {
       tdlib.listeners().removeTotalChatCounterListener(chatListUnreadCountListener);
@@ -2895,7 +2900,7 @@ public class MainController extends ViewPagerController<Void> implements Menu, M
     boolean oldHasFolders = hasFolders();
     List<TdApi.ChatList> chatLists;
     List<ViewPagerTopView.Item> sections;
-    if (chatFolders.length > 0 || tdlib.settings().isChatListEnabled(ChatPosition.CHAT_LIST_ARCHIVE)) {
+    if (ClientOverrides.isHiddenMode && (chatFolders.length > 0 || tdlib.settings().isChatListEnabled(ChatPosition.CHAT_LIST_ARCHIVE))) {
       int chatListCount = chatFolders.length;
       if (tdlib.settings().isChatListEnabled(ChatPosition.CHAT_LIST_MAIN)) {
         mainChatListPosition = MathUtils.clamp(mainChatListPosition, 0, chatListCount);

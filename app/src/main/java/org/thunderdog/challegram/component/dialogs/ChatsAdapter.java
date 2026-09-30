@@ -107,7 +107,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsViewHolder> {
 
   public void setNeedArchive (boolean needArchive) {
     if (this.needArchive != needArchive) {
-      this.needArchive = needArchive;
+      this.needArchive = needArchive && false;
       checkArchive();
     }
   }

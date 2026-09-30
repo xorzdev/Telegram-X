@@ -18,6 +18,22 @@ object ClientOverrides {
   private var tapCount = 0
   private var lastTapAt = 0L
 
+  interface HiddenModeListener {
+    fun onHiddenModeChanged (hiddenMode: Boolean)
+  }
+
+  private val listeners = mutableListOf<HiddenModeListener>()
+
+  @JvmStatic
+  fun addHiddenModeListener (listener: HiddenModeListener) {
+    listeners.add(listener)
+  }
+
+  @JvmStatic
+  fun removeHiddenModeListener (listener: HiddenModeListener) {
+    listeners.remove(listener)
+  }
+
   // 挂到入口 view 上：该 view 的每次点击都参与计数，连点够次数即切换隐藏模式
   @JvmStatic
   fun attach (view: View?) {
@@ -33,6 +49,9 @@ object ClientOverrides {
     }
     tapCount = 0
     isHiddenMode = !isHiddenMode
+    for (listener in listeners.toList()) {
+      listener.onHiddenModeChanged(isHiddenMode)
+    }
     UI.showToast(if (isHiddenMode) "Hidden mode ON" else "Hidden mode OFF", Toast.LENGTH_SHORT)
   }
 }
